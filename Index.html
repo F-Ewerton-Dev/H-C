@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Hellen, com Amor 💌</title>
+    <style>
+        :root {
+            --primary-color: #ff0000;
+            --secondary-color: #ff6666;
+            --dark-bg: #000000;
+            --envelope-color: #1a1a1a;
+            --envelope-flap-color: #2a2a2a;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--dark-bg);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+        }
+        
+        p.subtitle {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+        }
+        
+        /* Container principal */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            margin-top: 20px;
+        }
+        
+        /* Envelope */
+        .envelope {
+            width: 80%;
+            max-width: 300px;
+            height: 180px;
+            background: var(--envelope-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 0 0 5px 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+            transition: all 0.5s ease-in-out;
+            z-index: 2;
+        }
+        
+        /* Triângulo do envelope - CORREÇÃO PRINCIPAL */
+        .envelope-flap {
+            position: absolute;
+            top: 0px;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background: var(--envelope-flap-color);
+            clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+            transform-origin: top;
+            transition: all 0.5s ease-in-out;
+            z-index: 4; /* Maior z-index para ficar acima do envelope */
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            border-radius: 5px 5px 0 0;
+        }
+        
+        /* Linha de dobra do envelope */
+        .envelope-flap::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-50%);
+        }
+        
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            top: 0px;
+        }
+        
+        .envelope.open {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+        
+        /* Lacre - POSICIONAMENTO CORRIGIDO */
+        .seal {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 45px; /* Posicionado na ponta do triângulo */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5; /* Acima do triângulo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .seal:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+        
+        .seal::after {
+            content: '🌹';
+            position: absolute;
+            font-size: 28px;
+        }
+        
+        /* Carta */
+        .letter {
+            width: 80%;
+            max-width: 280px;
+            height: 400px;
+            background: var(--dark-bg);
+            padding: 25px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+            border-radius: 5px;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
+            text-align: left;
+            transition: all 0.7s ease-in-out;
+            z-index: 1;
+            overflow-y: auto;
+            border: 1px solid var(--primary-color);
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            line-height: 1.6;
+        }
+        
+        .letter.reveal {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .letter h3 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 1px dashed var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+        }
+        
+        .letter p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .letter .signature {
+            text-align: right;
+            font-style: italic;
+            margin-top: 30px;
+            color: var(--secondary-color);
+        }
+        
+        /* Efeitos de flores e corações */
+        .flower {
+            position: absolute;
+            font-size: 48px;
+            opacity: 0;
+            z-index: 10;
+            animation: explode 1.5s ease-out;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        
+        @keyframes explode {
+            0% { 
+                transform: translate(-50%, -50%) scale(0.3); 
+                opacity: 1; 
+                filter: brightness(1.5);
+            }
+            100% { 
+                transform: translate(
+                    calc(-50% + var(--tx)), 
+                    calc(-50% + var(--ty)))
+                    scale(0.1); 
+                opacity: 0; 
+            }
+        }
+        
+        .heart {
+            position: fixed;
+            font-size: 24px;
+            animation: float 4s ease-in-out infinite;
+            opacity: 0;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 400px) {
+            .envelope {
+                height: 150px;
+            }
+            .envelope-flap {
+                top: -75px;
+                height: 75px;
+            }
+            .seal {
+                top: -37px; /* Ajuste proporcional para mobile */
+                width: 40px;
+                height: 40px;
+            }
+            .seal::after {
+                font-size: 22px;
+            }
+            .letter {
+                height: 350px;
+                padding: 15px;
+            }
+            .envelope.open .envelope-flap {
+                top: -150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Para Hellen, com Amor 💖</h1>
+    <p class="subtitle">Clique no lacre...</p>
+    
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="seal" id="seal"></div>
+        </div>
+        
+        <div class="letter" id="letter">
+            <h3>Minha Querida Hellen,</h3>
+            <p>Desde o momento em que você entrou na minha vida, tudo ganhou um novo significado. Cada sorriso seu ilumina meus dias, cada abraço seu me dá forças, e cada olhar seu me faz ter certeza de que encontrei a pessoa com quem quero passar toda a minha vida.</p>
+            <p>Eu te amo de uma forma que palavras nunca poderão expressar completamente. É um amor que cresce a cada dia, que me faz querer ser melhor, que me faz sonhar com um futuro ao seu lado. Você é o meu porto seguro, minha melhor escolha, meu maior amor.</p>
+            <p>Quero estar com você em cada momento, celebrar nossas conquistas, superar desafios juntos e construir uma vida repleta de amor, cumplicidade e felicidade. Quero acordar todos os dias sabendo que você é minha e que sou seu, para sempre.</p>
+            <p>Hellen, você é o meu amor eterno, minha razão, meu tudo. E eu quero passar o resto da minha vida te fazendo feliz.</p>
+            <div class="signature">
+                <p>Com todo o meu amor,</p>
+                <p>💌 <i>Ewerton (seu nerd)</i></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const seal = document.getElementById('seal');
+            const envelope = document.getElementById('envelope');
+            const letter = document.getElementById('letter');
+            
+            const flowers = [
+                '🌹', '🌸', '🌺', '🌻', '🌼', '🌷', '💐', '🏵️', '🥀',
+                '❤️', '💖', '💗', '💘', '💝', '💞', '💕', '💟', '❣️', '💔'
+            ];
+            
+            seal.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Efeito de explosão de flores
+                createFlowerEffect(e.clientX, e.clientY);
+                
+                // Abrir envelope e revelar carta
+                openEnvelopeAndRevealLetter();
+                
+                // Criar corações flutuantes
+                setTimeout(createFloatingHearts, 1000);
+            });
+            
+            function createFlowerEffect(x, y) {
+                for (let i = 0; i < 100; i++) {
+                    createFlower(x, y);
+                }
+            }
+            
+            function createFlower(x, y) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+                
+                const size = 40 + Math.random() * 20;
+                flower.style.fontSize = `${size}px`;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 50 + Math.random() * 250;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                flower.style.setProperty('--tx', `${tx}px`);
+                flower.style.setProperty('--ty', `${ty}px`);
+                flower.style.left = `${x}px`;
+                flower.style.top = `${y}px`;
+                flower.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+                
+                document.body.appendChild(flower);
+                
+                setTimeout(() => flower.remove(), 1500);
+            }
+            
+            function openEnvelopeAndRevealLetter() {
+                envelope.classList.add('open');
+                
+                setTimeout(() => {
+                    letter.classList.add('reveal');
+                }, 500);
+            }
+            
+            function createFloatingHearts() {
+                for (let i = 0; i < 25; i++) {
+                    createHeart(i);
+                }
+            }
+            
+            function createHeart(index) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = ['❤️', '💖', '💗', '💓'][Math.floor(Math.random() * 4)];
+                heart.style.left = `${Math.random() * window.innerWidth}px`;
+                heart.style.top = `${window.innerHeight + 50}px`;
+                heart.style.animationDelay = `${index * 0.2}s`;
+                heart.style.opacity = '1';
+                heart.style.fontSize = `${20 + Math.random() * 20}px`;
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 4000);
+            }
+        });
+    </script>
+</body>
+</html>
