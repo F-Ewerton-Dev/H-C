@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vouchers Românticos</title>
+    <style>
+        /* Reset e Estilos Globais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2a2a2a; /* Cinza escuro */
+            color: #d13636; /* Vermelho escuro */
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d13636; /* Vermelho escuro */
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Lista de Vouchers */
+        .voucher-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .voucher-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: #3a3a3a; /* Cinza médio */
+            border: 1px solid #4a4a4a;
+        }
+
+        .voucher-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .voucher-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        .voucher-item:hover .voucher-image {
+            opacity: 1;
+        }
+
+        .voucher-count {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #d13636; /* Vermelho escuro */
+            color: #f0f0f0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+            border: 2px solid #a12a2a;
+        }
+
+        /* Popup */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #3a3a3a; /* Cinza médio */
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 80%;
+            text-align: center;
+            position: relative;
+            animation: popupFadeIn 0.4s;
+            border: 1px solid #4a4a4a;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.8);
+            color: #e0e0e0;
+        }
+
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #d13636; /* Vermelho escuro */
+        }
+
+        .popup h2 {
+            color: #d13636; /* Vermelho escuro */
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .popup p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        #popup-count {
+            color: #d13636;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .voucher-image {
+                height: 200px;
+            }
+            
+            .voucher-count {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .popup-content {
+                max-width: 90%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .voucher-image {
+                height: 180px;
+            }
+            
+            .voucher-count {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .popup h2 {
+                font-size: 1.3rem;
+            }
+            
+            .popup p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vouchers Exclusivos da Hellen</h1>
+        
+        <div class="voucher-list">
+            <!-- Voucher 1 -->
+            <div class="voucher-item" onclick="showVoucher(1)">
+                <img src="imagens/1.png" alt="Vale um Beijo Apaixonado" class="voucher-image">
+                <div class="voucher-count" id="count1">0</div>
+            </div>
+            
+            <!-- Voucher 2 -->
+            <div class="voucher-item" onclick="showVoucher(2)">
+                <img src="imagens/2.png" alt="Vale um Abraço Apertado" class="voucher-image">
+                <div class="voucher-count" id="count2">0</div>
+            </div>
+            
+            <!-- Voucher 3 -->
+            <div class="voucher-item" onclick="showVoucher(3)">
+                <img src="imagens/3.png" alt="Vale um Pedido de Desculpas" class="voucher-image">
+                <div class="voucher-count" id="count3">0</div>
+            </div>
+            
+            <!-- Voucher 4 -->
+            <div class="voucher-item" onclick="showVoucher(4)">
+                <img src="imagens/4.png" alt="Vale uma Sessão de Mimos" class="voucher-image">
+                <div class="voucher-count" id="count4">0</div>
+            </div>
+            
+            <!-- Voucher 5 -->
+            <div class="voucher-item" onclick="showVoucher(5)">
+                <img src="imagens/5.png" alt="Vale um Momento Só Nosso" class="voucher-image">
+                <div class="voucher-count" id="count5">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <h2 id="popup-title"></h2>
+            <p id="popup-message"></p>
+            <p>Total de resgates: <span id="popup-count"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Função para buscar dados do servidor
+        async function fetchVoucherData() {
+            try {
+                const response = await fetch('/api/vouchers');
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                return null;
+            }
+        }
+    
+        // Função para salvar dados no servidor
+        async function saveVoucherData(data) {
+            try {
+                const response = await fetch('/api/vouchers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao salvar dados:', error);
+                return null;
+            }
+        }
+    
+        // Atualiza os contadores na tela
+        async function updateCounters() {
+            const data = await fetchVoucherData();
+            if (data) {
+                for (let i = 0; i < 5; i++) {
+                    document.getElementById(`count${i+1}`).textContent = data.counts[i];
+                }
+            }
+        }
+    
+        // Mostra o popup do voucher
+        async function showVoucher(voucherNumber) {
+            const data = await fetchVoucherData();
+            if (!data) return;
+    
+            // Incrementa o contador
+            data.counts[voucherNumber - 1]++;
+            await saveVoucherData(data);
+            updateCounters();
+    
+            // Configura o popup
+            document.getElementById('popup-title').textContent = `Voucher ${voucherNumber}`;
+            document.getElementById('popup-message').innerHTML = data.messages[voucherNumber - 1].replace(/\n/g, '<br>');
+            document.getElementById('popup-count').textContent = data.counts[voucherNumber - 1];
+            
+            // Mostra o popup
+            document.getElementById('popup').style.display = 'flex';
+        }
+    
+        // Fecha o popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    
+        // Fecha o popup ao clicar fora
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('popup')) {
+                closePopup();
+            }
+        }
+    
+        // Inicializa os contadores ao carregar a página
+        window.onload = updateCounters;
+    </script>
+</body>
+</html>
