@@ -1,15 +1,13 @@
 {
-    "name": "vouchers-romanticos",
-    "version": "1.0.0",
-    "scripts": {
-        "start": "node server.js"
-    },
-    "dependencies": {
-        "express": "^4.21.2"
-    },
-    "main": "server.js",
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "description": ""
+  "name": "vouchers-romanticos",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": "18.x"
+  }
 }
